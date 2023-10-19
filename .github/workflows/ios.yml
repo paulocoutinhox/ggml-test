@@ -1,0 +1,42 @@
+name: iOS
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'extras/images/**'
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "macOS Latest Clang",
+            os: macos-12
+          }
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: "3.24.0"
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+        with:
+          version: "1.10.0"
+
+      - name: Verify
+        run: |
+          cmake --version
+          ninja --version
+
+      - name: Build
+        run: make build
