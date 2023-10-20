@@ -5333,7 +5333,7 @@ static struct ggml_tensor * ggml_add_impl(
     return result;
 }
 
-static struct ggml_tensor * ggml_add(
+struct ggml_tensor * ggml_add(
         struct ggml_context * ctx,
         struct ggml_tensor * a,
         struct ggml_tensor * b) {

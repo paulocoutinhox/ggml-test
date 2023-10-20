@@ -1,6 +1,6 @@
 # project
 cmake_minimum_required(VERSION 3.20.0)
-project(sample LANGUAGES CXX)
+project(sample LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -62,4 +62,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${METAL_FRAMEWORK})
 find_library(METALKIT_FRAMEWORK MetalKit REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${METALKIT_FRAMEWORK})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE whisper)
+target_link_libraries(${PROJECT_NAME} PRIVATE $<TARGET_OBJECTS:whisper>)
+
+# metal
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/whisper/ggml-metal.metal $<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/ggml-metal.metal
+)
